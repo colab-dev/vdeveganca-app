@@ -36,13 +36,11 @@ class _MyHomePageState extends State<MyHomePage> {
       'name': 'Toddy',
       'image': 'https://static.paodeacucar.com/img/uploads/1/400/615400.png',
       'description': 'Achocolatado da Pepsico',
-      'test': '1'
     },
     {
       'name': 'Nescau',
       'image': 'https://static.paodeacucar.com/img/uploads/1/250/637250.png',
       'description': 'Achocolatado Vegano muito melhor que o toddy',
-      'test': '2'
     },
   ];
 
