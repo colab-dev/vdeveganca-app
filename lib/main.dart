@@ -81,21 +81,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 return Text('loading');
               }
             })
-
-        // body: Column(
-        //   children: [
-        //     SearchBar(onSearch),
-        //     ...(this.items).map((item) {
-        //       return SearchResult(item);
-        //     }).toList(),
-        //   ],
-        // ),
         );
   }
 }
 
 Future<List<Ingredient>> fetchResults() async {
-  print('Fetching API');
   final response = await http.get('http://demo6344138.mockable.io/results');
 
   if (response.statusCode == 200) {
@@ -106,10 +96,6 @@ Future<List<Ingredient>> fetchResults() async {
       },
     ).toList();
     return ingredients;
-
-    // final parsed = json.decode(response.body).cast<List<Ingredient>>();
-    // return parsed.map<Ingredient>((json) => Ingredient.fromJson(json)).toList();
-    // return List<Ingredient>.fromJson();
   } else {
     throw Exception('Failed to load results');
   }
