@@ -64,13 +64,18 @@ class _MyHomePageState extends State<MyHomePage> {
         body: FutureBuilder<List<Ingredient>>(
             future: fetchResults(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.waiting &&
-                  snapshot.data != null) {
+              if (snapshot.hasData) {
+                List<Ingredient> ingredients = snapshot.data;
                 return Column(children: [
                   SearchBar(onSearch),
-                  ...snapshot.data.map((item) {
+
+                  ...ingredients.map((item) {
                     return SearchResult(item);
                   }).toList(),
+
+                  // ...snapshot.data.map((item) {
+                  //   return SearchResult(item);
+                  // }).toList(),
                 ]);
               } else {
                 return Text('loading');
@@ -90,11 +95,20 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 Future<List<Ingredient>> fetchResults() async {
+  print('Fetching API');
   final response = await http.get('http://demo6344138.mockable.io/results');
 
   if (response.statusCode == 200) {
-    final parsed = json.decode(response.body).cast<List<Ingredient>>();
-    return parsed.map<Ingredient>((json) => Ingredient.fromJson(json)).toList();
+    List<dynamic> body = jsonDecode(response.body);
+    List<Ingredient> ingredients = body.map(
+      (dynamic item) {
+        return Ingredient.fromJson(item);
+      },
+    ).toList();
+    return ingredients;
+
+    // final parsed = json.decode(response.body).cast<List<Ingredient>>();
+    // return parsed.map<Ingredient>((json) => Ingredient.fromJson(json)).toList();
     // return List<Ingredient>.fromJson();
   } else {
     throw Exception('Failed to load results');

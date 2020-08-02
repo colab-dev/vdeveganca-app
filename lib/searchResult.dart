@@ -15,14 +15,14 @@ class SearchResult extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.network(
-            this.item['image'],
+            this.item.image,
             fit: BoxFit.fill,
             width: 150,
           ),
           Column(
             children: [
-              Text(this.item['name']),
-              Text(this.item['description']),
+              Text(this.item.name),
+              Text(this.item.description),
             ],
           ),
         ],
