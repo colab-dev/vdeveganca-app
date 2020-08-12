@@ -12,9 +12,10 @@ class SearchBar extends StatelessWidget {
         children: [
           Flexible(
             child: TextFormField(
-                decoration: const InputDecoration(
-              hintText: 'Buscar ingrediente',
-            )),
+              decoration: const InputDecoration(
+                hintText: 'Buscar ingrediente',
+              ),
+            ),
           ),
           RaisedButton(
             onPressed: onSearch,

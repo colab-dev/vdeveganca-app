@@ -34,69 +34,56 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // Future<List<Ingredient>> items = List.filled(1, Ingredient);
-  // items = [
-  //   {
-  //     'name': 'Toddy',
-  //     'image': 'https://static.paodeacucar.com/img/uploads/1/400/615400.png',
-  //     'description': 'Achocolatado da Pepsico',
-  //   },
-  //   {
-  //     'name': 'Nescau',
-  //     'image': 'https://static.paodeacucar.com/img/uploads/1/250/637250.png',
-  //     'description': 'Achocolatado Vegano muito melhor que o toddy',
-  //   },
-  // ];
+  Future<List<Ingredient>> ingredients;
+
+  Future<List<Ingredient>> fetchResults() async {
+    final response = await http.get('http://demo6344138.mockable.io/results');
+
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      List<Ingredient> ingredients = body.map(
+        (dynamic item) {
+          return Ingredient.fromJson(item);
+        },
+      ).toList();
+      return ingredients;
+    } else {
+      throw Exception('Failed to load results');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    ingredients = fetchResults();
+  }
 
   void onSearch() {
-    print(fetchResults());
     setState(() {
-      // this.items = fetchResults();
+      this.ingredients = fetchResults();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: FutureBuilder<List<Ingredient>>(
-            future: fetchResults(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List<Ingredient> ingredients = snapshot.data;
-                return Column(children: [
-                  SearchBar(onSearch),
-
-                  ...ingredients.map((item) {
-                    return SearchResult(item);
-                  }).toList(),
-
-                  // ...snapshot.data.map((item) {
-                  //   return SearchResult(item);
-                  // }).toList(),
-                ]);
-              } else {
-                return Text('loading');
-              }
-            })
-        );
-  }
-}
-
-Future<List<Ingredient>> fetchResults() async {
-  final response = await http.get('http://demo6344138.mockable.io/results');
-
-  if (response.statusCode == 200) {
-    List<dynamic> body = jsonDecode(response.body);
-    List<Ingredient> ingredients = body.map(
-      (dynamic item) {
-        return Ingredient.fromJson(item);
-      },
-    ).toList();
-    return ingredients;
-  } else {
-    throw Exception('Failed to load results');
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: FutureBuilder<List<Ingredient>>(
+          future: ingredients,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(children: [
+                SearchBar(onSearch),
+                ...snapshot.data.map((item) {
+                  return SearchResult(item);
+                }).toList(),
+              ]);
+            } else {
+              return Text('loading');
+            }
+          }),
+    );
   }
 }
