@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import './searchBar.dart';
 import './searchResult.dart';
+import './models/ingredient.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,18 +34,35 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var items = [
-    {
-      'name': 'Toddy',
-      'image': 'https://static.paodeacucar.com/img/uploads/1/400/615400.png',
-      'description': 'Achocolatado da Pepsico',
-    },
-    {
-      'name': 'Nescau',
-      'image': 'https://static.paodeacucar.com/img/uploads/1/250/637250.png',
-      'description': 'Achocolatado Vegano muito melhor que o toddy',
-    },
-  ];
+  Future<List<Ingredient>> ingredients;
+
+  Future<List<Ingredient>> fetchResults() async {
+    final response = await http.get('http://demo6344138.mockable.io/results');
+
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      List<Ingredient> ingredients = body.map(
+        (dynamic item) {
+          return Ingredient.fromJson(item);
+        },
+      ).toList();
+      return ingredients;
+    } else {
+      throw Exception('Failed to load results');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    ingredients = fetchResults();
+  }
+
+  void onSearch() {
+    setState(() {
+      this.ingredients = fetchResults();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +70,20 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Column(
-        children: [
-          SearchBar(),
-          ...this.items.map((item) {
-            return SearchResult(item);
-          }).toList(),
-        ],
-      ),
+      body: FutureBuilder<List<Ingredient>>(
+          future: ingredients,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(children: [
+                SearchBar(onSearch),
+                ...snapshot.data.map((item) {
+                  return SearchResult(item);
+                }).toList(),
+              ]);
+            } else {
+              return Text('loading');
+            }
+          }),
     );
   }
 }

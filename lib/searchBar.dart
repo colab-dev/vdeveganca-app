@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
+  final onSearch;
+  SearchBar(this.onSearch);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -9,12 +12,13 @@ class SearchBar extends StatelessWidget {
         children: [
           Flexible(
             child: TextFormField(
-                decoration: const InputDecoration(
-              hintText: 'Buscar ingrediente',
-            )),
+              decoration: const InputDecoration(
+                hintText: 'Buscar ingrediente',
+              ),
+            ),
           ),
           RaisedButton(
-            onPressed: null,
+            onPressed: onSearch,
             child: Text('Buscar'),
           ),
         ],
