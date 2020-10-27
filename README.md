@@ -1,12 +1,12 @@
-# vdeveganca_app
+# V de Vegança App for Android and iOS
 
-A new Flutter project.
+This project will simply the use of our database for search of products and ingredients.
+It should also evolve to enable easy addition of data by the community.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Useful resources on Flutter
 
-A few resources to get you started if this is your first Flutter project:
+The following is residual boilerplate from the flutter base project.
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
