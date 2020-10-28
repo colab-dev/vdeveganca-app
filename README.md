@@ -1,6 +1,6 @@
 # V de Vegança App for Android and iOS
 
-This project will simply the use of our database for search of products and ingredients.
+This project will simplify the use of our database for the search of products and ingredients.
 It should also evolve to enable easy addition of data by the community.
 
 
